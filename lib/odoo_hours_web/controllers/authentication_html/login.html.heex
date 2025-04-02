@@ -1,0 +1,8 @@
+<div>
+  <.form :let={f} for={@changeset} class="flex flex-col gap-2" action={~p"/authentication/authenticate"}>
+    <.input field={f[:username]} />
+    <.input type="password" field={f[:password]} />
+
+    <.button type="submit">Login</.button>
+  </.form>
+</div>
