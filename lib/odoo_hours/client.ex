@@ -5,7 +5,12 @@ defmodule OdooHours.Client do
   A client to interface with the odoo API
   """
 
-  defstruct [:database, :url, :id, :password]
+  @type t :: %__MODULE__{
+    database: String.t(),
+    url: String.t()
+  }
+  @enforce_keys [:database, :url]
+  defstruct [:database, :url]
 
   @auth_path "/xmlrpc/2/common"
   @object_path "/xmlrpc/2/object"
@@ -27,8 +32,9 @@ defmodule OdooHours.Client do
       |> XMLRPC.decode
 
   {:ok, id}
-  end
+end
 
+  @spec user_entries(OdooHours.Client.t(), any(), any()) :: any()
   def user_entries(config, id, password, options \\ []) do
     options =
       Keyword.merge(
