@@ -9,17 +9,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
-    strategy:
-      matrix:
-        otp: ['21.1', '22.2', '23.3']
-        elixir: ['1.8.2', '1.9.4']
+    name: Test
     steps:
       - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
-        with:
-          otp-version: ${{matrix.otp}}
-          elixir-version: ${{matrix.elixir}}
       - run: mix deps.get
       - run: mix test
-      
