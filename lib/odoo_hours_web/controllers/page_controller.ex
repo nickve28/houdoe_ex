@@ -14,11 +14,11 @@ defmodule OdooHoursWeb.PageController do
 
     config = %OdooHours.Client{database: @database, url: @url}
 
-    OdooHours.Client.user_entries(
-      config,
-      external_id,
-      password
-    )
+    # OdooHours.Client.user_entries(
+    #   config,
+    #   external_id,
+    #   password
+    # )
 
     render(conn, :home, layout: false, external_id: external_id)
   end

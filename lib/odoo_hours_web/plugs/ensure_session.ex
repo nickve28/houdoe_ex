@@ -16,6 +16,7 @@ defmodule OdooHoursWeb.Plugs.EnsureSession do
         conn
         # todo can use paths here i think
         |> redirect(to: "/authentication/login")
+        |> halt()
       _session -> conn
     end
   end

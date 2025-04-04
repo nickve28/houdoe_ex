@@ -60,7 +60,8 @@ defmodule OdooHours.MixProject do
       {:bandit, "~> 1.5"},
       {:xmlrpc, "~> 1.4.3"},
       {:httpoison, "~> 2.2"},
-      {:dotenv, "~> 3.0.0"}
+      {:dotenv, "~> 3.0.0"},
+      {:mock, "~> 0.3.0", only: :test}
     ]
   end
 
