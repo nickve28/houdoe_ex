@@ -22,7 +22,7 @@ defmodule OdooHoursWeb.Router do
     pipe_through [:browser, :protected]
 
     get "/", PageController, :home
-    live "/hours", Liveviews.HoursLive
+    live "/hours", Live.HoursLive
   end
 
   scope "/authentication", OdooHoursWeb do

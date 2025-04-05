@@ -1,0 +1,15 @@
+<div>
+   <h1>hours</h1>
+   <table>
+      <tbody id="hours" phx-update="stream">
+         <tr
+            :for={{phx_id, %{ name: name, date: date, unit_amount: unit_amount }} <- @streams.hours}
+            id={phx_id}
+         >
+            <td>{date}</td>
+            <td>{name}</td>
+            <td>{unit_amount}</td>
+         </tr>
+      </tbody>
+   </table>
+</div>

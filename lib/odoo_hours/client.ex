@@ -16,6 +16,43 @@ defmodule OdooHours.Client do
   @object_path "/xmlrpc/2/object"
   @user_agent %{}
 
+  @default_user_hours_fields [
+    "id",
+    "category",
+    "can_edit",
+    "plan_id",
+    "unit_amount",
+    "product_uom_id",
+    "date",
+    "name",
+    "task_id",
+    "holiday_id",
+    "product_id",
+    "validated",
+    "amount",
+    "display_name",
+    "is_timesheet"
+  ]
+
+  # %{
+  #   "amount" => 0.0,
+  #   "can_edit" => true,
+  #   "category" => "other",
+  #   "date" => "2025-12-31",
+  #   "display_name" => "Internal Project - Leaves - default",
+  #   "holiday_id" => [10195,
+  #    "--- op Wettelijk verlof 2025: 24.00 uren op 29-12-2025"],
+  #   "id" => <number>,
+  #   "is_timesheet" => true,
+  #   "name" => "Time Off (3/3)",
+  #   "plan_id" => [4, "- Default"],
+  #   "product_id" => false,
+  #   "product_uom_id" => [6, "Hour(s)"],
+  #   "task_id" => [13, "Leaves - default"],
+  #   "unit_amount" => 8.0,
+  #   "validated" => false
+  # }
+
   @doc """
   Authenticates to odoo, and gives the means to perform subsequent requests
   """
@@ -41,10 +78,17 @@ end
         [
           limit: 10,
           where: [],
-          fields: []
+          fields:  @default_user_hours_fields
+
         ],
         options
       )
+
+      [
+        [
+          ["user_id", "=", id]
+        ] ++ options[:where]
+      ]
 
     execute_kw(
       config,
@@ -62,7 +106,7 @@ end
         "limit" => options[:limit]
       }
     )
-    # |> atomize_keys()
+    |> atomize_keys()
   end
 
 
@@ -108,4 +152,7 @@ end
   defp url(%OdooHours.Client{ url: base_url }) do
     "#{base_url}#{@object_path}"
   end
+
+  defp atomize_keys(list) when is_list(list), do: Enum.map(list, &atomize_keys/1)
+  defp atomize_keys(%{} = map), do: Map.new(map, fn {k, v} -> {String.to_atom(k), v} end)
 end
