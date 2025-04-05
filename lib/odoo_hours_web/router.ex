@@ -22,19 +22,15 @@ defmodule OdooHoursWeb.Router do
     pipe_through [:browser, :protected]
 
     get "/", PageController, :home
+    live "/hours", Liveviews.HoursLive
   end
 
-  scope "/authentication" do
+  scope "/authentication", OdooHoursWeb do
     pipe_through :browser
 
-    get "/login", OdooHoursWeb.AuthenticationController, :login
-    post "/authenticate", OdooHoursWeb.AuthenticationController, :authenticate
+    get "/login", AuthenticationController, :login
+    post "/authenticate", AuthenticationController, :authenticate
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", OdooHoursWeb do
-  #   pipe_through :api
-  # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:odoo_hours, :dev_routes) do

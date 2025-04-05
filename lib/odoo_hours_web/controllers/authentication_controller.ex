@@ -23,6 +23,6 @@ defmodule OdooHoursWeb.AuthenticationController do
     conn
     |> put_session(:external_id, id)
     |> put_session(:password, password)
-    |> redirect(to: "/")
+    |> redirect(to: ~p"/hours")
   end
 end
