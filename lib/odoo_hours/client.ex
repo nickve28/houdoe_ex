@@ -107,6 +107,7 @@ end
       }
     )
     |> atomize_keys()
+    |> Enum.map(fn item -> %{ item | date: from_date(item[:date]) } end)
   end
 
 
@@ -141,6 +142,11 @@ end
       err ->
         raise "#{inspect(err)}"
     end
+  end
+
+  defp from_date(date) do
+    {:ok, result} = Date.from_iso8601(date)
+    result
   end
 
   @spec auth_url(config: %OdooHours.Client{}) :: String.t()

@@ -1,15 +1,24 @@
 <div>
-   <h1>hours</h1>
-   <table>
-      <tbody id="hours" phx-update="stream">
-         <tr
-            :for={{phx_id, %{ name: name, date: date, unit_amount: unit_amount }} <- @streams.hours}
+  <h1>hours</h1>
+  <div class="flex flex-col gap-2" id="hours" phx-update="stream">
+    <div
+      :for={day <- @day_range}
+      class="border-spacing-1 border-black border-1 border-x-2 border-y-2"
+    >
+      <h2 class="font-serif font-bold">{day}</h2>
+
+      <table class="w-[100%]">
+        <tbody>
+          <tr
+            :for={{phx_id, %{name: name, date: ^day, unit_amount: unit_amount}} <- @streams.hours}
             id={phx_id}
-         >
-            <td>{date}</td>
+          >
+            <td>{day}</td>
             <td>{name}</td>
-            <td>{unit_amount}</td>
-         </tr>
-      </tbody>
-   </table>
+            <td class="ml-auto">{unit_amount}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
