@@ -1,6 +1,6 @@
 <div class="bg-gray-100">
   <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 w-[100%]">
-    <h1 class="font-bold">Total hours for week ({@total_hours})</h1>
+    <h1 class="font-serif font-bold">Total hours for week ({@total_hours})</h1>
   </div>
   <div class="flex flex-col gap-2 " id="hours" phx-update="stream">
     <div :for={day <- @day_range} class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 w-[100%]">
