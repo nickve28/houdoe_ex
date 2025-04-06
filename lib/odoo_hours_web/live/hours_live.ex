@@ -25,10 +25,23 @@ defmodule OdooHoursWeb.Live.HoursLive do
         where: [] |> filter_current_week(start_of_week, end_of_week)
       )
 
+    total_hours_per_week = hours
+    |> Enum.reduce(%{}, fn entry, acc ->
+      date = entry[:date]
+      hours = entry[:unit_amount]
+      Map.update(acc, date, hours, &(&1 + hours))
+    end)
+
+    total_hours = total_hours_per_week
+    |> Map.values()
+    |> Enum.sum
+
     socket =
       socket
       |> stream(:hours, hours, at: 0)
-      |> assign(:day_range, day_range |> Enum.to_list() |> IO.inspect)
+      |> assign(:day_range, day_range |> Enum.to_list())
+      |> assign(:total_hours_per_week, total_hours_per_week)
+      |> assign(:total_hours, total_hours)
 
     {:ok, socket}
   end
