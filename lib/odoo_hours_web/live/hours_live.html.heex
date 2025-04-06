@@ -12,8 +12,7 @@
       <ul class="w-[100%]">
         <li :for={{phx_id, %{name: name, date: ^day, unit_amount: unit_amount}} <- @streams.hours} id={phx_id}>
           <div class="grid grid-cols-9 gap-4">
-            <div class="col-span-2">{day}</div>
-            <div class="col-span-6">{name}</div>
+            <div class="col-span-8">{name}</div>
             <div class="mr-auto">{unit_amount}</div>
           </div>
         </li>
