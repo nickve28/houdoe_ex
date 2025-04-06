@@ -7,12 +7,22 @@ defmodule OdooHours.Application do
 
   @impl true
   def start(_type, _args) do
+    # Workaround for Windows DNS resolver
+    if match?({:win32, _}, :os.type()) do
+      :inet_db.set_lookup([:native, :dns])
+
+      System.get_env("ODOO_WINDOWS_ERL_DNS_SERVER")
+      |> String.split(".")
+      |> Enum.map(&String.to_integer/1)
+      |> List.to_tuple()
+      |> :inet_db.add_ns()
+    end
+
     children = [
       OdooHoursWeb.Telemetry,
       OdooHours.Repo,
       {Ecto.Migrator,
-        repos: Application.fetch_env!(:odoo_hours, :ecto_repos),
-        skip: skip_migrations?()},
+       repos: Application.fetch_env!(:odoo_hours, :ecto_repos), skip: skip_migrations?()},
       {DNSCluster, query: Application.get_env(:odoo_hours, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: OdooHours.PubSub},
       # Start the Finch HTTP client for sending emails

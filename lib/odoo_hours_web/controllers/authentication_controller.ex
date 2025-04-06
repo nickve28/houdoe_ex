@@ -1,9 +1,6 @@
 defmodule OdooHoursWeb.AuthenticationController do
   use OdooHoursWeb, :controller
 
-  @url System.get_env("ODOO_URL")
-  @database System.get_env("ODOO_DB")
-
   def login(conn, _params) do
     changeset = Authentication.changeset(%Authentication{})
     render(conn, :login, layout: false, changeset: changeset)
@@ -14,7 +11,7 @@ defmodule OdooHoursWeb.AuthenticationController do
     # IO.puts(changeset.username)
     auth = Map.get(params, "authentication")
     %{ "username" => username, "password" => password } = auth
-    config = %OdooHours.Client{database: @database, url: @url}
+    config = %OdooHours.Client{database: odoo_url(), url: odoo_db()}
 
     {:ok, id} = OdooHours.Client.authenticate(
       config, username, password
@@ -25,4 +22,8 @@ defmodule OdooHoursWeb.AuthenticationController do
     |> put_session(:password, password)
     |> redirect(to: ~p"/hours")
   end
+
+
+  defp odoo_url, do: System.get_env("ODOO_URL")
+  defp odoo_db, do: System.get_env("ODOO_DB")
 end
