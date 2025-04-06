@@ -5,34 +5,38 @@ defmodule OdooHoursWeb.Live.HoursLive do
     %{"external_id" => external_id, "password" => password} = session
     config = %OdooHours.Client{database: odoo_db(), url: odoo_url()}
 
+    start_of_week =
+      Date.utc_today()
+      |> Date.beginning_of_week(:monday)
+
+    end_of_week = start_of_week |> Date.add(4)
+
+    day_range =
+      Date.range(
+        end_of_week,
+        start_of_week
+      )
+
     hours =
       OdooHours.Client.user_entries(
         config,
         external_id,
         password,
-        where: [] |> filter_current_week()
+        where: [] |> filter_current_week(start_of_week, end_of_week)
       )
-
-    day_range =
-      hours
-      |> Enum.map(fn %{date: date} -> date end)
-      |> Enum.uniq()
-      |> Enum.sort(fn x, y -> Date.before?(y, x) end)
 
     socket =
       socket
       |> stream(:hours, hours, at: 0)
-      |> assign(:day_range, day_range)
+      |> assign(:day_range, day_range |> Enum.to_list() |> IO.inspect)
 
     {:ok, socket}
   end
 
-  defp filter_current_week(filters) do
-    today = Date.utc_today()
-
+  defp filter_current_week(filters, start_of_week, end_of_week) do
     [
-      ["date", ">=", Date.add(today, -7) |> Date.to_string()],
-      ["date", "<=", today |> Date.to_string()]
+      ["date", ">=", start_of_week |> Date.to_string()],
+      ["date", "<=", end_of_week |> Date.to_string()]
       | filters
     ]
   end
