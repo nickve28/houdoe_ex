@@ -2,4 +2,9 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@theme {
+    --font-sans: InterVariable, sans-serif;
+  }
+
+
 /* This file is for your main application CSS */
