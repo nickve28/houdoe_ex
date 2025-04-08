@@ -25,6 +25,13 @@ defmodule OdooHoursWeb.Live.HoursLive do
         where: [] |> filter_current_week(start_of_week, end_of_week)
       )
 
+    projects =
+      OdooHours.Client.projects(
+        config,
+        external_id,
+        password
+      )
+
     total_hours_per_week = hours
     |> Enum.reduce(%{}, fn entry, acc ->
       date = entry[:date]
@@ -42,6 +49,7 @@ defmodule OdooHoursWeb.Live.HoursLive do
       |> assign(:day_range, day_range |> Enum.to_list())
       |> assign(:total_hours_per_week, total_hours_per_week)
       |> assign(:total_hours, total_hours)
+      |> assign(:projects, projects)
 
     {:ok, socket}
   end

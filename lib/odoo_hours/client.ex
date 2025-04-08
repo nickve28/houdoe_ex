@@ -110,6 +110,71 @@ end
     |> Enum.map(fn item -> %{ item | date: from_date(item[:date]) } end)
   end
 
+  def create_entry(config, user_id, password, %{} = params) do
+    execute_kw(config, user_id, password, "account.analytic.line", "create", [params])
+  end
+
+  def update_entry(config, user_id, password, id, %{} = params) do
+    execute_kw(config, user_id, password, "account.analytic.line", "write", [[id], params])
+  end
+
+  def delete_entry(config, user_id, password, id) do
+    execute_kw(config, user_id, password, "account.analytic.line", "unlink", [[id]])
+  end
+
+  def project_tasks(config, user_id, password, project_id, options \\ []) do
+    options = Keyword.merge([
+      name: "",
+      fields: ["id", "name"],
+      limit: 15
+    ], options)
+
+    execute_kw(
+      config,
+      user_id,
+      password,
+      "project.task",
+      "search_read",
+      [
+        [
+          ["project_id", "=", project_id],
+          ["name", "ilike", options[:name]]
+        ]
+      ],
+      %{
+        "fields" => options[:fields],
+        "limit" => options[:limit]
+      }
+    )
+    |> atomize_keys()
+  end
+
+  def projects(config, user_id, password, options \\ []) do
+    options = Keyword.merge([
+      name: "",
+      fields: ["id", "name"],
+      limit: 30
+    ], options)
+
+    execute_kw(
+      config,
+      user_id,
+      password,
+      "project.project",
+      "search_read",
+      [
+        [
+          ["name", "ilike", options[:name]]
+        ]
+      ],
+      %{
+        "fields" => options[:fields],
+        "limit" => options[:limit]
+      }
+    )
+    |> atomize_keys()
+  end
+
 
   defp execute_kw(config, id, password, model_name, method_name, params \\ [], named_params \\ %{}) do
     %OdooHours.Client{ database: database} = config
