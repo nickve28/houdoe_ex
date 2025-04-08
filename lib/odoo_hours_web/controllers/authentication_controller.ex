@@ -8,10 +8,9 @@ defmodule OdooHoursWeb.AuthenticationController do
 
   def authenticate(conn, params) do
     changeset = Authentication.changeset(%Authentication{}, Map.get(params, "authentication"))
-    # IO.puts(changeset.username)
     auth = Map.get(params, "authentication")
     %{ "username" => username, "password" => password } = auth
-    config = %OdooHours.Client{database: odoo_url(), url: odoo_db()}
+    config = %OdooHours.Client{database: odoo_db(), url: odoo_url()}
 
     {:ok, id} = OdooHours.Client.authenticate(
       config, username, password
