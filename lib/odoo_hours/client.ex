@@ -28,6 +28,7 @@ defmodule OdooHours.Client do
     "task_id",
     "holiday_id",
     "product_id",
+    "project_id",
     "validated",
     "amount",
     "display_name",
